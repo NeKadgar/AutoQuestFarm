@@ -1,0 +1,5 @@
+.idea
+dumps
+.pgdata
+*.pyc
+points.db
