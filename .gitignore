@@ -3,3 +3,4 @@ dumps
 .pgdata
 *.pyc
 points.db
+venv/
