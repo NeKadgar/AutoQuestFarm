@@ -52,7 +52,26 @@ class Location(object):
         scale_width = width / 100
         points = get_location_points(numbers)
         for point in points:
-            cv2.circle(img, (int(scale_width * point[2]), int(scale_height * point[3])), 1, (0, 255, 0), -1)
+            cv2.circle(img, (int(scale_width * point.x), int(scale_height * point.y)), 1, (0, 255, 0), -1)
+        img = cv2.resize(img, (3840, 2160))
+        imgplot = plt.imshow(img)
+        plt.show()
+
+
+    @classmethod
+    def show_path_on_map(cls, numbers, points):
+        map_name = "{}.jpg".format(cls.get_location(numbers))
+        path_to_img = os.path.abspath("DB/maps/{}".format(map_name))
+        img = cv2.imread(path_to_img)
+        height, width, _c = img.shape
+        scale_height = height / 100
+        scale_width = width / 100
+        for point in points:
+            cv2.circle(img, (int(scale_width * point.x), int(scale_height * point.y)), 1, (255, 0, 0), -1)
+        point = points[-1]
+        cv2.circle(img, (int(scale_width * point.x), int(scale_height * point.y)), 5, (255, 0, 0), -1)
+        point = points[0]
+        cv2.circle(img, (int(scale_width * point.x), int(scale_height * point.y)), 5, (255, 255, 0), -1)
         img = cv2.resize(img, (3840, 2160))
         imgplot = plt.imshow(img)
         plt.show()

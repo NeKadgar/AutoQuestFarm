@@ -30,33 +30,37 @@ class Cursor(object):
 
     @classmethod
     def get_cursor_type(cls):
-        info = win32gui.GetCursorInfo()
-        hdc = win32ui.CreateDCFromHandle(win32gui.GetDC(0))
-        hbmp = win32ui.CreateBitmap()
-        hbmp.CreateCompatibleBitmap(hdc, 32, 32)
-        hdc = hdc.CreateCompatibleDC()
-        hdc.SelectObject(hbmp)
-        hdc.DrawIcon((0, 0), info[1])
-        hbmp.SaveBitmapFile(hdc, "bin.bmp")
-        current_cursor = Image.open("bin.bmp")
-        if not cls.loaded:
-            cls.load_cursors()
-            cls.loaded = True
-        for cursor in cls.cursors:
-            result = ImageChops.difference(current_cursor, cursor["var"]).getbbox()
-            if result is None:
-                return cursor["icon_name"]
-        return None
+        try:
+            info = win32gui.GetCursorInfo()
+            hdc = win32ui.CreateDCFromHandle(win32gui.GetDC(0))
+            hbmp = win32ui.CreateBitmap()
+            hbmp.CreateCompatibleBitmap(hdc, 32, 32)
+            hdc = hdc.CreateCompatibleDC()
+            hdc.SelectObject(hbmp)
+            hdc.DrawIcon((0, 0), info[1])
+            hbmp.SaveBitmapFile(hdc, "bin.bmp")
+            current_cursor = Image.open("bin.bmp")
+            if not cls.loaded:
+                cls.load_cursors()
+                cls.loaded = True
+            for cursor in cls.cursors:
+                result = ImageChops.difference(current_cursor, cursor["var"]).getbbox()
+                if result is None:
+                    return cursor["icon_name"]
+            return None
+        except:
+            print("Error")
+            cls.get_cursor_type()
 
     @classmethod
     def find_quest(cls):
         pydirectinput.moveTo(*WowWindow.get_center_point())
-        pyautogui.keyDown("a")
-        while True:
-            if cls.get_cursor_type() == "Quest1":
+        for i in range(0, 100):
+            pyautogui.keyDown("a")
+            if cls.get_cursor_type() == "Quest1" or cls.get_cursor_type() == "Quest_Completed1":
                 pydirectinput.click(button='right')
                 break
-            elif cls.get_cursor_type() == "Quest0":
+            elif cls.get_cursor_type() == "Quest0" or cls.get_cursor_type() == "Quest_Completed1":
                 pyautogui.keyUp("a")
                 pyautogui.keyDown("w")
                 for i in range(0, 12):
@@ -65,8 +69,9 @@ class Cursor(object):
                         pyautogui.keyUp("w")
                         break
                 pyautogui.keyUp("w")
-            time.sleep(0.01)
-        pyautogui.keyUp("a")
+            time.sleep(0.05)
+            pyautogui.keyUp("a")
+
 
     @classmethod
     def save_cursor_icon(cls, filename):

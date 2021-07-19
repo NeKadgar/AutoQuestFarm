@@ -9,8 +9,7 @@ import time
 import autoit
 from .WoWPoint import WoWPoint
 import keyboard
-from DB.PointsDB import add_point, get_location_points
-
+from DB.PointsDB import add_point, get_location_points, get_near_points
 
 def calculate_heading(p_from, p_to):  # for WoWPoint's
     target = math.atan2(p_to.x - p_from.x, p_to.y - p_from.y)
@@ -52,21 +51,35 @@ def turn(desired_direction):
 
 
 def find_way(location, p_from, p_to):
-    points = get_location_points(location)
-    p = min(points, key=lambda x: distance_to(x, p_from))
-
+    pass
+    # points = get_location_points(location)
+    # dist = distance_to(p_from, p_to)
+    # points.append(p_to)
+    # points.append(p_from)
+    # p1 = min(points, key=lambda x: distance_to(x, p_from))
+    # # points.append(p)
+    # # way = [p]
+    # p = min(points, key=lambda x: distance_to(x, p_to))
+    # # for i in range(0, 1000):
+    # #     near = get_near_points(location, way[-1].x, way[-1].y, dist//4)
+    # #     near = [item for item in near if item not in way]
+    # #     way.append(min(near, key=lambda x: distance_to(x, p_to)))
+    # #     if distance_to(p, way[-1]) < 40:
+    # #         break
+    # # return way
+    # find_path(p.id, p1.id)
 
 def move_to_point(p_to):
     WorldData.update(image=ImageGrab.grab(Pixels.pixels_cord))
     x, y, facing = WorldData.x, WorldData.y, WorldData.facing
-    desired_direction = calculate_heading(WoWPoint(x, y), p_to)
-    turn(desired_direction)
+    desired_direction = calculate_heading(WoWPoint(000, x, y), p_to)
+    # turn(desired_direction)
     while True:
         t = time.time()
         WorldData.update(image=ImageGrab.grab(Pixels.pixels_cord))
         x, y, facing = WorldData.x, WorldData.y, WorldData.facing
 
-        dir = get_direction(WoWPoint(x, y), p_to, facing)
+        dir = get_direction(WoWPoint(000, x, y), p_to, facing)
         if abs(dir[0]) < 0.1 and abs(dir[1]) < 0.1:
             break
         if abs(dir[0]) >= abs(dir[1]):
@@ -86,7 +99,9 @@ def move_to_point(p_to):
 
 
 def move_by_points(points):
+    WowWindow.set_focus()
     for p_to in points:
+        print(p_to)
         move_to_point(p_to)
 
 

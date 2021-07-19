@@ -1,8 +1,7 @@
 {
   "Human": [
-    {"Quest": 0, "NPC": [48.16, 42.93]},
-    {"Quest": 1, "NPC": [48.87, 41.65]},
-    {"Quest": 0, "NPC": [48.87, 41.65]},
-    {"Quest": 0, "NPC": [48.16, 42.93]}
+    {"Action": ["Quest", 1], "NPC": [48.87, 41.65], "location": 697687},
+    {"Action": ["Quest", 0], "NPC": [48.87, 41.65], "location": 697687},
+    {"Action": ["Quest", 0], "NPC": [48.16, 42.93], "location": 697687}
   ]
 }
