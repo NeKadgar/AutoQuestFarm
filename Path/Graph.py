@@ -57,7 +57,7 @@ def find_path(location, p_start, p_goal):
     while cur_node != start.id:
         cur_node = visited[cur_node]
         way_id.append(cur_node)
-    way = []
+    way = [goal]
     for p in way_id:
         way.append(get_point_by_id(p))
     return reversed(way)

@@ -3,7 +3,7 @@ import keyboard
 
 
 class Pixels(object):
-    pixels_cord = [0, 0, 290, 10]
+    pixels_cord = [0, 0, 300, 10]
     x = (10, 5)
     facing = x
     y = (30, 5)
@@ -20,7 +20,7 @@ class Pixels(object):
     target_max_health = (250, 5)
     target_lvl = (270, 5)
     target_attack_range = (270, 5)
-
+    quest_counter = (290, 5)
 
     @classmethod
     def cursor_position(cls):

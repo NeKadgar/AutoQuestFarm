@@ -1,5 +1,7 @@
 from .config import Pixels
 from Path.WoWPoint import WoWPoint
+from PIL import ImageGrab
+
 
 PI = 3.14159265
 PI2 = PI * 2
@@ -21,9 +23,11 @@ class WorldData(object):
     target_max_health = None
     target_lvl = None
     target_attack_range = None
+    quest_counter = None
 
     @classmethod
-    def update(cls, image):
+    def update(cls, *args, **kwargs):
+        image = ImageGrab.grab(Pixels.pixels_cord)
         cls.x = (image.getpixel(Pixels.x)[0] + image.getpixel(Pixels.x)[1] / 255) / 255 * 100
         cls.y = (image.getpixel(Pixels.y)[0] + image.getpixel(Pixels.y)[1] / 255) / 255 * 100
         cls.facing = image.getpixel(Pixels.facing)[2] * 2 * PI / 255
@@ -39,7 +43,17 @@ class WorldData(object):
         cls.target_max_health = sum(list(image.getpixel(Pixels.target_max_health)))
         cls.target_lvl = image.getpixel(Pixels.target_lvl)[0]
         cls.target_attack_range = image.getpixel(Pixels.target_attack_range)[2]
+        cls.quest_counter = sum(list(image.getpixel(Pixels.quest_counter)))
         return 0
+
+    @classmethod
+    def quest_completed(cls, *args, **kwargs):
+        image = ImageGrab.grab(Pixels.pixels_cord)
+        count = sum(list(image.getpixel(Pixels.quest_counter)))
+        if cls.quest_counter != count:
+            cls.quest_counter = count
+            return True
+        return False
 
     @classmethod
     def show(cls):

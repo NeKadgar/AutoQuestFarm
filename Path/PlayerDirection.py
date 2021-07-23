@@ -50,30 +50,8 @@ def turn(desired_direction):
             break
 
 
-def find_way(location, p_from, p_to):
-    pass
-    # points = get_location_points(location)
-    # dist = distance_to(p_from, p_to)
-    # points.append(p_to)
-    # points.append(p_from)
-    # p1 = min(points, key=lambda x: distance_to(x, p_from))
-    # # points.append(p)
-    # # way = [p]
-    # p = min(points, key=lambda x: distance_to(x, p_to))
-    # # for i in range(0, 1000):
-    # #     near = get_near_points(location, way[-1].x, way[-1].y, dist//4)
-    # #     near = [item for item in near if item not in way]
-    # #     way.append(min(near, key=lambda x: distance_to(x, p_to)))
-    # #     if distance_to(p, way[-1]) < 40:
-    # #         break
-    # # return way
-    # find_path(p.id, p1.id)
-
 def move_to_point(p_to):
     WorldData.update(image=ImageGrab.grab(Pixels.pixels_cord))
-    x, y, facing = WorldData.x, WorldData.y, WorldData.facing
-    desired_direction = calculate_heading(WoWPoint(000, x, y), p_to)
-    # turn(desired_direction)
     while True:
         t = time.time()
         WorldData.update(image=ImageGrab.grab(Pixels.pixels_cord))
@@ -94,14 +72,14 @@ def move_to_point(p_to):
                 autoit.send("{d down}{a up}")
             else:
                 autoit.send("{a down}{d up}")
-        print("runtime:", time.time() - t)
+        # print("runtime:", time.time() - t)
     autoit.send("{s up}{a up}{d up}{w up}")
 
 
 def move_by_points(points):
     WowWindow.set_focus()
     for p_to in points:
-        print(p_to)
+        # print(p_to)
         move_to_point(p_to)
 
 

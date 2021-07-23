@@ -8,6 +8,7 @@ from Path.WoWPoint import WoWPoint
 from Path.PlayerDirection import move_by_points
 from Cursor.Cursor import Cursor
 
+
 class ScriptInterpreter(object):
     script = None
 

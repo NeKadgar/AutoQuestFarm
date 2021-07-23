@@ -6,9 +6,8 @@ from Base.ScriptInterpreter import ScriptInterpreter
 from DB.Location import Location
 from Cursor.Cursor import Cursor
 import time
-from Path.PlayerDirection import record_points, distance_to, find_way, move_by_points
 from Path.WoWPoint import WoWPoint
-from DB.PointsDB import get_near_points
+from DB.PointsDB import get_near_points, get_location_points
 from Path.Graph import find_path, Graph
 
 # WowWindow.set_focus()
@@ -19,11 +18,16 @@ Pixels.cursor_position()
 # Cursor.find_quest()
 # WorldData.update(ImageGrab.grab(Pixels.pixels_cord))
 # Location.show_points_on_map(697687)
+WorldData.update(ImageGrab.grab(Pixels.pixels_cord))
 ScriptInterpreter.load_script("Human")
 ScriptInterpreter.start()
-# print(ScriptInterpreter.script)
-# print(Graph(697687).graph)
-# print(find_path(697687, WoWPoint(1, 47.99, 43.14), WoWPoint(1, 46.08, 37.33)))
-# Location.show_path_on_map(697687, find_path(697687, WoWPoint(1, 47.99, 43.14), WoWPoint(1, 46.08, 37.33)))
-# move_by_points(find_path(697687, WoWPoint(1, 47.99, 43.14), WoWPoint(1, 46.08, 37.33)))
+# points = get_location_points(697687)
+# p_to = WoWPoint(000, 48.93, 40.16)
+# p_from = WoWPoint(000, 48.16, 42.93)
+# way = find_path(697687, WoWPoint(000, 48.16, 42.93), WoWPoint(000, 48.93, 40.16))
+# print(way)
+# for i in way:
+#     print(i)
+# goal = min(points, key=lambda x: distance_to(x, p_to))
+# print(goal)
 WorldData.show()
