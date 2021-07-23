@@ -9,6 +9,9 @@ import time
 from Path.WoWPoint import WoWPoint
 from DB.PointsDB import get_near_points, get_location_points
 from Path.Graph import find_path, Graph
+from Base.SharkEye import SharkEye
+
+
 
 # WowWindow.set_focus()
 Pixels.cursor_position()
@@ -19,8 +22,9 @@ Pixels.cursor_position()
 # WorldData.update(ImageGrab.grab(Pixels.pixels_cord))
 # Location.show_points_on_map(697687)
 WorldData.update(ImageGrab.grab(Pixels.pixels_cord))
-ScriptInterpreter.load_script("Human")
-ScriptInterpreter.start()
+SharkEye.find_movement()
+# ScriptInterpreter.load_script("Human")
+# ScriptInterpreter.start()
 # points = get_location_points(697687)
 # p_to = WoWPoint(000, 48.93, 40.16)
 # p_from = WoWPoint(000, 48.16, 42.93)

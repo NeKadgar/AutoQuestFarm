@@ -16,7 +16,7 @@ class WowWindow(object):
     def get_app_position(cls):
         func = getattr(cls.app, cls.TITLE)  # self.app.TITLE
         position = func.rectangle()
-        position = [(position.left, position.top), (position.right, position.bottom)]
+        position = [position.left, position.top, position.right, position.bottom]
         return position
 
     @classmethod
