@@ -11,6 +11,7 @@ from .WoWPoint import WoWPoint
 import keyboard
 from DB.PointsDB import add_point, get_location_points, get_near_points
 
+
 def calculate_heading(p_from, p_to):  # for WoWPoint's
     target = math.atan2(p_to.x - p_from.x, p_to.y - p_from.y)
     return math.pi + target
@@ -46,7 +47,7 @@ def turn(desired_direction):
         time.sleep(0.1)
         pyautogui.keyUp(key)
         WorldData.update(image=ImageGrab.grab(Pixels.pixels_cord))
-        if desired_direction - 0.3 < WorldData.facing < desired_direction + 0.3:
+        if desired_direction - 0.7 < WorldData.facing < desired_direction + 0.7:
             break
 
 

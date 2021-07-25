@@ -24,6 +24,7 @@ class WorldData(object):
     target_lvl = None
     target_attack_range = None
     quest_counter = None
+    in_combat = False
 
     @classmethod
     def update(cls, *args, **kwargs):

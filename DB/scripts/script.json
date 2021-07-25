@@ -5,6 +5,6 @@
     {"Action": ["Quest", 1], "NPC": [48.17, 42.94], "location": 697687},
     {"Action": ["Quest", 1], "NPC": [48.93, 40.16], "location": 697687},
     {"Action": ["Kill", "Loot"], "NPC": [["Young Wolf", 14]], "location": 697687},
-    {"Action": ["Kill"], "NPC": [["Kobold Laborer", 14]], "location": 697687}
+    {"Action": ["Kill", ""], "NPC": [["Kobold Laborer", 14]], "location": 697687}
   ]
 }

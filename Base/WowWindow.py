@@ -25,5 +25,5 @@ class WowWindow(object):
 
     @classmethod
     def get_center_point(cls):
-        point_a, point_b = cls.get_app_position()
-        return (point_a[0] + point_b[0]) // 2, (point_a[1] + point_b[1]) // 2
+        x1, y1, x2, y2 = cls.get_app_position()
+        return (x1 + x2) // 2, (y1 + y2) // 2

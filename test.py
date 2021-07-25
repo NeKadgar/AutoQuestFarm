@@ -10,7 +10,8 @@ from Path.WoWPoint import WoWPoint
 from DB.PointsDB import get_near_points, get_location_points
 from Path.Graph import find_path, Graph
 from Base.SharkEye import SharkEye
-
+from Base.FightRotation import MageRotation
+from Path.StuckDetector import stuck_detector
 
 
 # WowWindow.set_focus()
@@ -22,9 +23,15 @@ Pixels.cursor_position()
 # WorldData.update(ImageGrab.grab(Pixels.pixels_cord))
 # Location.show_points_on_map(697687)
 WorldData.update(ImageGrab.grab(Pixels.pixels_cord))
-SharkEye.find_movement()
-# ScriptInterpreter.load_script("Human")
-# ScriptInterpreter.start()
+# MageRotation.prepare()
+# SharkEye.set_target()
+# MageRotation.attack()
+# SharkEye.find_lootable()
+
+# stuck_detector()
+# Cursor.save_cursor_icon("Cursor/Icons/AutoLoot1.bmp")
+ScriptInterpreter.load_script("Human")
+ScriptInterpreter.start()
 # points = get_location_points(697687)
 # p_to = WoWPoint(000, 48.93, 40.16)
 # p_from = WoWPoint(000, 48.16, 42.93)

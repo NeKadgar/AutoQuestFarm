@@ -13,10 +13,23 @@ class Cursor(object):
     QUEST0 = None
     QUEST_COMPLETED0 = None
     QUEST_COMPLETED1 = None
+    ATTACK0 = None
+    ATTACK1 = None
+    SELLER0 = None
+    SELLER1 = None
+    AUTOLOOT0 = None
+    AUTOLOOT1 = None
+
     cursors = [{"var": QUEST1, "icon_name": "Quest1"},
                {"var": QUEST0, "icon_name": "Quest0"},
                {"var": QUEST_COMPLETED0, "icon_name": "Quest_Сompleted0"},
-               {"var": QUEST_COMPLETED1, "icon_name": "Quest_Сompleted1"}]
+               {"var": QUEST_COMPLETED1, "icon_name": "Quest_Сompleted1"},
+               {"var": ATTACK0, "icon_name": "Attack0"},
+               {"var": ATTACK1, "icon_name": "Attack1"},
+               {"var": SELLER0, "icon_name": "Seller0"},
+               {"var": SELLER1, "icon_name": "Seller1"},
+               {"var": AUTOLOOT0, "icon_name": "AutoLoot0"},
+               {"var": AUTOLOOT1, "icon_name": "AutoLoot1"}]
     loaded = False
 
     @classmethod
@@ -56,6 +69,42 @@ class Cursor(object):
         except:
             print("Error")
             return None
+
+    @classmethod
+    def find_enemy(cls, boxes):
+        enemy_boxes = []
+        for box in boxes:
+            x, y, w, h = box
+            pydirectinput.moveTo(int(x + w // 2), int(y + h // 2))
+            cursor_type = cls.get_cursor_type()
+            if cursor_type == "Attack1":
+                return box
+            elif cursor_type == "Attack0":
+                enemy_boxes.append(box)
+        if enemy_boxes:
+            return enemy_boxes[0]
+        return None
+
+    @classmethod
+    def find_lootable(cls, boxes):
+        for box in boxes:
+            x, y, w, h = box
+            pydirectinput.moveTo(int(x + w // 2), int(y + h // 2))
+            cursor_type = cls.get_cursor_type()
+            if cursor_type == "AutoLoot0":
+                x_center, y_center = WowWindow.get_center_point()
+                pydirectinput.moveTo(x_center, y_center)
+                pydirectinput.mouseDown(button="right")
+                pydirectinput.move((x - x_center) // 6)
+                pydirectinput.mouseUp(button="right")
+                pyautogui.keyDown("w")
+                time.sleep(0.5)
+                pyautogui.keyUp("w")
+                return "again"
+            elif cursor_type == "AutoLoot1":
+                pydirectinput.rightClick(int(x + w // 2), int(y + h // 2))
+                return True
+        return False
 
     @classmethod
     def find_quest(cls):
