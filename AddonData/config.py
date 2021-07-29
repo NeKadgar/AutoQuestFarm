@@ -7,6 +7,7 @@ class Pixels(object):
     x = (10, 5)
     facing = x
     y = (30, 5)
+    in_combat = y
     zone_name = (50, 5)
     max_health = (70, 5)
     current_health = (90, 5)

@@ -25,7 +25,7 @@ class Spell:
         self.time_of_cast = time.time()
 
     def is_available(self):
-        if WorldData.current_mana >= self.mana_cost and self.is_in_range():
+        if WorldData.current_mana >= self.mana_cost:
             if time.time() - self.time_of_cast > self.effect_duration:
                 return True
         return False
@@ -39,8 +39,8 @@ class Spell:
 
 
 class MageRotation(object):
-    heal_spell = Spell(effect_duration=18, button="=")
-    mana_spell = Spell(effect_duration=18, button="-")
+    heal_spell = Spell(effect_duration=18, button="=", cast_range=999, mana_cost=0)
+    mana_spell = Spell(effect_duration=18, button="-", cast_range=999, mana_cost=0)
     frost_armor = Spell(effect_duration=1800, button="0", cast_range=999, mana_cost=60)
     fire_ball = Spell(effect_duration=0, button="2", cast_range=35, cast_time=1.6, mana_cost=30)
 
@@ -72,17 +72,18 @@ class MageRotation(object):
 
     @classmethod
     def attack(cls):
-        WorldData.in_combat = True
         i = 0
         while WorldData.target_health >= 1 or i > 20:
             WorldData.update()
-            if cls.fire_ball.is_in_range() and cls.fire_ball.is_available():
+            if cls.fire_ball.is_in_range():
+                pyautogui.press("1")
+                if not cls.fire_ball.is_available():
+                    time.sleep(2)
                 cls.fire_ball.cast()
-                print(float(cls.fire_ball.time_of_cast))
                 time.sleep(float(cls.fire_ball.cast_time))
                 continue
             pyautogui.keyDown("w")
             time.sleep(0.1)
             i += 1
             pyautogui.keyUp("w")
-        WorldData.in_combat = False
+        WorldData.in_combat_bot = False

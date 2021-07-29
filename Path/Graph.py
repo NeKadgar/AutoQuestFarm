@@ -15,7 +15,7 @@ class Graph:
     def __init__(self, location):
         points = get_location_points(location)
         for point in points:
-            near = get_near_points(location, point.x, point.y, 40)
+            near = get_near_points(location, point.x, point.y, 60)
             near = [item for item in near if item.id != point.id]
             near_ = []
             for p in near:

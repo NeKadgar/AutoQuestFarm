@@ -7,6 +7,9 @@ from Path.WoWPoint import WoWPoint
 from Path.PlayerDirection import move_by_points
 from Base.WowWindow import WowWindow
 from DB.PointsDB import get_location_points
+from shapely.geometry.polygon import Polygon
+import numpy as np
+from DB.Units import Units
 
 
 class Location(object):
@@ -57,6 +60,48 @@ class Location(object):
         imgplot = plt.imshow(img)
         plt.show()
 
+    @classmethod
+    def set_polygon(cls, numbers):
+        name = input("Название: ")
+        map_name = "{}.jpg".format(cls.get_location(numbers))
+        path_to_img = os.path.abspath("DB/maps/{}".format(map_name))
+        img = cv2.imread(path_to_img)
+        height, width, _c = img.shape
+        print(height, width, _c)
+        scale_height = height / 100
+        scale_width = width / 100
+        points = get_location_points(numbers)
+        for point in points:
+            cv2.circle(img, (int(scale_width * point.x), int(scale_height * point.y)), 1, (0, 255, 0), -1)
+        imgplot = plt.imshow(img)
+        polygon_points = []
+
+        def onclick(event):
+            print('%s click: button=%d, x=%d, y=%d, xdata=%f, ydata=%f' %
+                  ('double' if event.dblclick else 'single', event.button,
+                   event.x, event.y, event.xdata, event.ydata))
+            if event.button == 2:
+                cv2.circle(img, (int(event.xdata), int(event.ydata)), 3, (255, 0, 0), -1)
+                polygon_points.append(WoWPoint(000, float(event.xdata/scale_width), float(event.ydata/scale_height)))
+                imgplot.set_data(img)
+                plt.pause(1)
+            if event.button == 3:
+                pts = np.array([[p.x*scale_width, p.y*scale_height] for p in polygon_points], np.int32)
+
+                pts = pts.reshape((-1, 1, 2))
+                cv2.polylines(img, [pts], True, (255, 0, 0, 10), 3)
+                polygon = Polygon([[p.x, p.y] for p in polygon_points])
+                print(polygon.wkt)
+                imgplot.set_data(img)
+                plt.pause(1)
+                save = input("Сохранить {} y/n?".format(name))
+                if save == "y":
+                    Units.update(name, [[p.x, p.y] for p in polygon_points])
+                    print("Saved please close window.")
+                    plt.clf()
+        cid = imgplot.figure.canvas.mpl_connect('button_press_event', onclick)
+
+        plt.show()
 
     @classmethod
     def show_path_on_map(cls, numbers, points):
@@ -67,11 +112,8 @@ class Location(object):
         scale_height = height / 100
         scale_width = width / 100
         for point in points:
-            cv2.circle(img, (int(scale_width * point.x), int(scale_height * point.y)), 1, (255, 0, 0), -1)
+            cv2.circle(img, (int(scale_width * point[0]), int(scale_height * point[1])), 1, (255, 0, 0), -1)
         point = points[-1]
-        cv2.circle(img, (int(scale_width * point.x), int(scale_height * point.y)), 5, (255, 0, 0), -1)
-        point = points[0]
-        cv2.circle(img, (int(scale_width * point.x), int(scale_height * point.y)), 5, (255, 255, 0), -1)
         img = cv2.resize(img, (3840, 2160))
         imgplot = plt.imshow(img)
         plt.show()

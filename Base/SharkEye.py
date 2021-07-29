@@ -67,34 +67,29 @@ class SharkEye(object):
 
     @classmethod
     def find_target(cls):
-        # WowWindow.set_focus()
-        pyautogui.press("tab")
-        WorldData.update()
-        if WorldData.target_health >= 1:
-            pyautogui.press("enter")
-            pyautogui.typewrite("/targetmarker 6", interval=0.01)
-            pyautogui.press("enter")
-            x, y, x1, y1 = WowWindow.get_app_position()
-            image = ImageGrab.grab((x, y + 100, x1, y1))
-            image = np.array(image)
+        x, y, x1, y1 = WowWindow.get_app_position()
+        image = ImageGrab.grab((x, y + 100, x1, y1))
+        image = np.array(image)
 
-            low_blue = (0, 100, 255)
+        low_blue = (0, 100, 255)
 
-            high_blue = (0, 255, 255)
+        high_blue = (0, 255, 255)
 
-            only_cat = cv2.inRange(image, low_blue, high_blue)
-            print(only_cat)
-            contours, _ = cv2.findContours(only_cat, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-            counturs = sorted(contours, key=cv2.contourArea, reverse=True)
-            for contour in counturs:
-                cv2.drawContours(image, counturs[0], -1, (255, 0, 255), 3)
-                cv2.imshow("Counturs", image)  # рисует рокно с конурами
-                # cv2.imshow("Mask", mask)
-            # cv2.imshow("ret",ret)
-            # cv2.imshow("blur",blurred_frame)
-            # key = cv2.waitKey(1)
-            # cv2.imshow("", only_cat)
-            # cv2.waitKey(0)
+        only_cat = cv2.inRange(image, low_blue, high_blue)
+        contours, _ = cv2.findContours(only_cat, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+        contours = sorted(contours, key=cv2.contourArea, reverse=True)
+        x_center, y_center = WowWindow.get_center_point()
+        if contours:
+            x = contours[0][0][0][0]
+            pydirectinput.moveTo(x_center, y_center)
+            pydirectinput.mouseDown(button="right")
+            pydirectinput.move((x - x_center) // 6)
+            pydirectinput.mouseUp(button="right")
+            print("find")
+            return True
+        else:
+            x = x_center
+            return False
 
     @classmethod
     def set_target(cls):
@@ -102,7 +97,15 @@ class SharkEye(object):
         pyautogui.press("tab")
         WorldData.update()
         if WorldData.target_health > 10:
-            return True
+            pyautogui.press("enter")
+            pyautogui.typewrite("/targetmarker 6", interval=0.01)
+            pyautogui.press("enter")
+
+            while not cls.find_target():
+                pyautogui.keyDown("a")
+                time.sleep(0.5)
+                pyautogui.keyUp("a")
+        return True
 
     @classmethod
     def find_lootable(cls):
@@ -120,8 +123,17 @@ class SharkEye(object):
 
     @classmethod
     def attack(cls):
-        enemy_box = cls.find_movement()
-        if enemy_box is not None:
-            x, y, w, h = enemy_box
-            pydirectinput.leftClick(x + w // 2, y + w // 2)
-            rotation.attack()
+        # WorldData.in_combat_bot = True
+        rotation.attack()
+
+    @classmethod
+    def check_combat(cls):
+        if WorldData.in_combat:
+            if WorldData.target_health < 10:
+                SharkEye.set_target()
+            else:
+                while cls.find_target():
+                    pyautogui.keyDown("a")
+                    time.sleep(0.5)
+                    pyautogui.keyUp("a")
+            SharkEye.attack()

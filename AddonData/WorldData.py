@@ -1,7 +1,14 @@
+import time
+
+import cv2
+import numpy as np
+import pyautogui
+import pydirectinput
+
+from Base import WowWindow
 from .config import Pixels
 from Path.WoWPoint import WoWPoint
 from PIL import ImageGrab
-
 
 PI = 3.14159265
 PI2 = PI * 2
@@ -24,13 +31,18 @@ class WorldData(object):
     target_lvl = None
     target_attack_range = None
     quest_counter = None
-    in_combat = False
+    in_combat = 0
+    in_combat_bot = False  # if in combat by script
+    _set_target = None
+    _attack = None
+    _find_target = None
 
     @classmethod
     def update(cls, *args, **kwargs):
         image = ImageGrab.grab(Pixels.pixels_cord)
         cls.x = (image.getpixel(Pixels.x)[0] + image.getpixel(Pixels.x)[1] / 255) / 255 * 100
         cls.y = (image.getpixel(Pixels.y)[0] + image.getpixel(Pixels.y)[1] / 255) / 255 * 100
+        cls.in_combat = image.getpixel(Pixels.in_combat)[2]
         cls.facing = image.getpixel(Pixels.facing)[2] * 2 * PI / 255
         cls.zone = "".join([str(a) for a in image.getpixel(Pixels.zone_name)])
         cls.max_health = sum(list(image.getpixel(Pixels.max_health)))
@@ -45,7 +57,34 @@ class WorldData(object):
         cls.target_lvl = image.getpixel(Pixels.target_lvl)[0]
         cls.target_attack_range = image.getpixel(Pixels.target_attack_range)[2]
         cls.quest_counter = sum(list(image.getpixel(Pixels.quest_counter)))
+        if not cls.in_combat_bot:
+            if cls.in_combat:
+                print("start fight")
+                cls.in_combat_bot = True
+                # if not WorldData.target_health:
+                #     print("set target")
+                #     cls._set_target()
+
+                pyautogui.press("enter")
+                pyautogui.typewrite("/targetmarker 6", interval=0.01)
+                pyautogui.press("enter")
+                f = False
+                while not f:
+                    pyautogui.keyDown("a")
+                    time.sleep(0.5)
+                    pyautogui.keyUp("a")
+                    f = cls._find_target()
+                    print(f)
+
+                print("attack mode")
+                cls._attack()
         return 0
+
+    @classmethod
+    def set_funcs(cls, set_target, attack, find_target):
+        cls._set_target = set_target
+        cls._attack = attack
+        cls._find_target = find_target
 
     @classmethod
     def quest_completed(cls, *args, **kwargs):
