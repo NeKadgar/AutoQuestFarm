@@ -62,7 +62,7 @@ class Location(object):
 
     @classmethod
     def set_polygon(cls, numbers):
-        name = input("Название: ")
+        name = input("NPC name: ")
         map_name = "{}.jpg".format(cls.get_location(numbers))
         path_to_img = os.path.abspath("DB/maps/{}".format(map_name))
         img = cv2.imread(path_to_img)

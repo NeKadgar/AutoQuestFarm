@@ -1,4 +1,19 @@
 import win32api, win32con, win32gui, win32ui
+import pydirectinput
+import time
+from Base.WowWindow import WowWindow
+
+
+class Commands:
+    MARKER = "/targetmarker 6"
+    ROTATE = "/run FlipCameraYaw(90)"
+    REPOP = "/run RepopMe()"
+    RETRIVE = "/run RetrieveCorpse()"
+
+
+def pretty(d, indent=0):
+   for key, value in d.items():
+      print("{}: {}".format(key, value))
 
 
 def scalar_mult(a, b, x, y):
@@ -33,3 +48,16 @@ def convert_wowhead_cords(cords):
         cords.pop(0)
         cords.pop(0)
         print(list)
+
+
+def mouse_drag(x, y, duration):
+    t = time.time()
+    x_center, y_center = WowWindow.get_center_point()
+
+    pydirectinput.moveTo(x_center, y_center)
+    pydirectinput.mouseDown(button="right")
+    while time.time() - t < duration:
+        pydirectinput.move(50, 0)
+        time.sleep(1)
+    pydirectinput.mouseUp(button="right")
+

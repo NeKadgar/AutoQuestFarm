@@ -10,7 +10,7 @@ import numpy as np
 from Base.display import Display
 from Cursor.Cursor import Cursor
 from Base.FightRotation import MageRotation
-
+from Base.utils import Commands
 # display = Display(3840, 2160)
 # display = None
 rotation = MageRotation
@@ -67,45 +67,53 @@ class SharkEye(object):
 
     @classmethod
     def find_target(cls):
-        x, y, x1, y1 = WowWindow.get_app_position()
-        image = ImageGrab.grab((x, y + 100, x1, y1))
-        image = np.array(image)
-
-        low_blue = (0, 100, 255)
-
-        high_blue = (0, 255, 255)
-
-        only_cat = cv2.inRange(image, low_blue, high_blue)
-        contours, _ = cv2.findContours(only_cat, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-        contours = sorted(contours, key=cv2.contourArea, reverse=True)
-        x_center, y_center = WowWindow.get_center_point()
-        if contours:
-            x = contours[0][0][0][0]
-            pydirectinput.moveTo(x_center, y_center)
-            pydirectinput.mouseDown(button="right")
-            pydirectinput.move((x - x_center) // 6)
-            pydirectinput.mouseUp(button="right")
-            print("find")
-            return True
-        else:
-            x = x_center
-            return False
+        # x, y, x1, y1 = WowWindow.get_app_position()
+        # image = ImageGrab.grab((x, y + 100, x1, y1))
+        # image = np.array(image)
+        #
+        # low_blue = (0, 100, 255)
+        #
+        # high_blue = (0, 255, 255)
+        #
+        # only_cat = cv2.inRange(image, low_blue, high_blue)
+        # contours, _ = cv2.findContours(only_cat, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+        # contours = sorted(contours, key=cv2.contourArea, reverse=True)
+        # x_center, y_center = WowWindow.get_center_point()
+        # if contours:
+        #     x = contours[0][0][0][0]
+        #     pydirectinput.moveTo(x_center, y_center)
+        #     pydirectinput.mouseDown(button="right")
+        #     pydirectinput.move((x - x_center) // 6)
+        #     pydirectinput.mouseUp(button="right")
+        #     print("find")
+        #     return True
+        # else:
+        #     x = x_center
+        #     return False
+        pyautogui.keyDown("a")
+        while True:
+            pyautogui.press("2")
+            WorldData.update()
+            if WorldData.action_used:
+                pyautogui.keyUp("a")
+                return True
+            if not WorldData.target_health:
+                return True
 
     @classmethod
     def set_target(cls):
         WowWindow.set_focus()
         pyautogui.press("tab")
         WorldData.update()
-        if WorldData.target_health > 10:
+        if WorldData.target_health > 10 and WorldData.range_to_target < 45:
             pyautogui.press("enter")
-            pyautogui.typewrite("/targetmarker 6", interval=0.01)
+            pyautogui.typewrite(Commands.MARKER, interval=0.01)
             pyautogui.press("enter")
 
             while not cls.find_target():
-                pyautogui.keyDown("a")
-                time.sleep(0.5)
-                pyautogui.keyUp("a")
-        return True
+                pass
+            return True
+        return False
 
     @classmethod
     def find_lootable(cls):

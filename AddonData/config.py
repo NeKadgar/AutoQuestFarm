@@ -20,7 +20,8 @@ class Pixels(object):
     target_health = (230, 5)
     target_max_health = (250, 5)
     target_lvl = (270, 5)
-    target_attack_range = (270, 5)
+    target_attack_range = target_lvl
+    action_used = target_lvl  # skill "2"
     quest_counter = (290, 5)
 
     @classmethod

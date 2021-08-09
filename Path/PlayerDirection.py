@@ -52,6 +52,7 @@ def turn(desired_direction):
 
 
 def move_to_point(p_to):
+    print("Moving to ", p_to)
     WorldData.update(image=ImageGrab.grab(Pixels.pixels_cord))
     while True:
         t = time.time()
@@ -59,6 +60,8 @@ def move_to_point(p_to):
         x, y, facing = WorldData.x, WorldData.y, WorldData.facing
 
         dir = get_direction(WoWPoint(000, x, y), p_to, facing)
+        if WorldData.in_combat:
+            autoit.send("{s up}{a up}{d up}{w up}")
         if abs(dir[0]) < 0.1 and abs(dir[1]) < 0.1:
             break
         if abs(dir[0]) >= abs(dir[1]):
@@ -87,9 +90,10 @@ def move_by_points(points):
 def record_points():
     WowWindow.set_focus()
     while True:
-        if keyboard.is_pressed('alt'):
+        if keyboard.is_pressed('ctrl'):
             break
         WorldData.update(image=ImageGrab.grab(Pixels.pixels_cord))
         x, y, location = WorldData.x, WorldData.y, WorldData.zone
         add_point(location, x, y)
+        print(x, y)
         time.sleep(1)

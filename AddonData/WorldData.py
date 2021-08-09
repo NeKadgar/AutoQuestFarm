@@ -4,11 +4,12 @@ import cv2
 import numpy as np
 import pyautogui
 import pydirectinput
-
+from Base.utils import Commands
 from Base import WowWindow
 from .config import Pixels
 from Path.WoWPoint import WoWPoint
 from PIL import ImageGrab
+import autoit
 
 PI = 3.14159265
 PI2 = PI * 2
@@ -30,12 +31,15 @@ class WorldData(object):
     target_max_health = None
     target_lvl = None
     target_attack_range = None
+    action_used = None
     quest_counter = None
     in_combat = 0
     in_combat_bot = False  # if in combat by script
+    in_dead_body = False
     _set_target = None
     _attack = None
     _find_target = None
+    _move_to_point = None
 
     @classmethod
     def update(cls, *args, **kwargs):
@@ -57,34 +61,35 @@ class WorldData(object):
         cls.target_lvl = image.getpixel(Pixels.target_lvl)[0]
         cls.target_attack_range = image.getpixel(Pixels.target_attack_range)[2]
         cls.quest_counter = sum(list(image.getpixel(Pixels.quest_counter)))
+        cls.action_used = image.getpixel(Pixels.action_used)[1]
         if not cls.in_combat_bot:
             if cls.in_combat:
+                autoit.send("{s up}{a up}{d up}{w up}")
                 print("start fight")
                 cls.in_combat_bot = True
-                # if not WorldData.target_health:
-                #     print("set target")
-                #     cls._set_target()
-
-                pyautogui.press("enter")
-                pyautogui.typewrite("/targetmarker 6", interval=0.01)
-                pyautogui.press("enter")
-                f = False
-                while not f:
-                    pyautogui.keyDown("a")
-                    time.sleep(0.5)
-                    pyautogui.keyUp("a")
-                    f = cls._find_target()
-                    print(f)
-
                 print("attack mode")
                 cls._attack()
+        if not cls.in_dead_body:
+            if cls.current_health < 2:
+                cls.in_dead_body = True
+                print("dead")
+                x, y = cls.x, cls.y
+                print(x, y)
+                pyautogui.typewrite(Commands.REPOP, interval=0.01)
+                pyautogui.press("enter")
+                time.sleep(10)
+                cls._move_to_point(WoWPoint(000, x, y))
+                pyautogui.typewrite(Commands.RETRIVE, interval=0.01)
+                pyautogui.press("enter")
+                time.sleep(1)
         return 0
 
     @classmethod
-    def set_funcs(cls, set_target, attack, find_target):
+    def set_funcs(cls, set_target, attack, find_target, move_to_point):
         cls._set_target = set_target
         cls._attack = attack
         cls._find_target = find_target
+        cls._move_to_point = move_to_point
 
     @classmethod
     def quest_completed(cls, *args, **kwargs):

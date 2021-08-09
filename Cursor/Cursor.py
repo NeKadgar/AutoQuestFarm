@@ -19,6 +19,8 @@ class Cursor(object):
     SELLER1 = None
     AUTOLOOT0 = None
     AUTOLOOT1 = None
+    REPAIR0 = None
+    REPAIR1 = None
 
     cursors = [{"var": QUEST1, "icon_name": "Quest1"},
                {"var": QUEST0, "icon_name": "Quest0"},
@@ -29,7 +31,9 @@ class Cursor(object):
                {"var": SELLER0, "icon_name": "Seller0"},
                {"var": SELLER1, "icon_name": "Seller1"},
                {"var": AUTOLOOT0, "icon_name": "AutoLoot0"},
-               {"var": AUTOLOOT1, "icon_name": "AutoLoot1"}]
+               {"var": AUTOLOOT1, "icon_name": "AutoLoot1"},
+               {"var": REPAIR0, "icon_name": "Repair0"},
+               {"var": REPAIR1, "icon_name": "Repair1"}]
     loaded = False
 
     @classmethod
@@ -91,6 +95,7 @@ class Cursor(object):
             x, y, w, h = box
             pydirectinput.moveTo(int(x + w // 2), int(y + h // 2))
             cursor_type = cls.get_cursor_type()
+            print(cursor_type)
             if cursor_type == "AutoLoot0":
                 x_center, y_center = WowWindow.get_center_point()
                 pydirectinput.moveTo(x_center, y_center)
@@ -105,6 +110,30 @@ class Cursor(object):
                 pydirectinput.rightClick(int(x + w // 2), int(y + h // 2))
                 return True
         return False
+
+    @classmethod
+    def find_seller(cls):
+        x, y = WowWindow.get_center_point()
+        pydirectinput.moveTo(x, y)
+        for i in range(0, 50):
+            for k in range(1, 11):
+                pydirectinput.moveTo(x, y // 5 * k)
+                if cls.get_cursor_type() == "Repair1" or cls.get_cursor_type() == "Seller1":
+                    pydirectinput.click(button='right')
+                    return True
+                elif cls.get_cursor_type() == "Repair0" or cls.get_cursor_type() == "Seller0":
+                    pyautogui.keyDown("w")
+                    for j in range(0, 12):
+                        time.sleep(0.05)
+                        if cls.get_cursor_type() == "Quest1":
+                            pydirectinput.click(button='right')
+                            pyautogui.keyUp("w")
+                            return True
+                    pyautogui.keyUp("w")
+            pydirectinput.moveTo(x, y)
+            pydirectinput.mouseDown(button="right")
+            pydirectinput.move(50, 0)
+            pydirectinput.mouseUp(button="right")
 
     @classmethod
     def find_quest(cls):
