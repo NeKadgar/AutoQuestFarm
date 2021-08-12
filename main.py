@@ -4,7 +4,7 @@ from Path.PlayerDirection import record_points, move_to_point
 from AddonData.WorldData import WorldData
 from DB.Location import Location
 from Base.ScriptInterpreter import ScriptInterpreter
-from Base.utils import pretty
+from Base.utils import pretty_print
 from Base.TelegramCore import TelegramCore
 
 MENU_TEXT = '''
@@ -40,12 +40,12 @@ if __name__ == "__main__":
             WowWindow.set_focus()
             ScriptInterpreter.start()
         elif f == "2":
-            pretty(Location.locations)
+            pretty_print(Location.locations)
             Location.show_points_on_map(int(input("Location id: ")))
         elif f == "3":
             record_points()  # press ctrl to stop
         elif f == "4":
-            pretty(Location.locations)
+            pretty_print(Location.locations)
             Location.set_polygon(int(input("Location id: ")))  # set point mouse button 2, save right mouse button
         elif f == "5":
             TelegramCore.setup(session_name)

@@ -11,7 +11,7 @@ class Commands:
     RETRIVE = "/run RetrieveCorpse()"
 
 
-def pretty(d, indent=0):
+def pretty_print(d, indent=0):
    for key, value in d.items():
       print("{}: {}".format(key, value))
 
