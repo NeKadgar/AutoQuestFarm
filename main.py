@@ -48,7 +48,7 @@ if __name__ == "__main__":
             pretty(Location.locations)
             Location.set_polygon(int(input("Location id: ")))  # set point mouse button 2, save right mouse button
         elif f == "5":
-            TelegramCore.setup()
+            TelegramCore.setup(session_name)
         elif f == "0":
             break
     print("Goodbye")

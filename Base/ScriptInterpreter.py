@@ -27,17 +27,20 @@ class ScriptInterpreter(object):
     script = None
     units = None
     counter = 0
+    bin_dict = None
 
     @classmethod
     def get_current_action(cls):
-        with open('bin', 'r+') as f:
-            cls.counter = int(f.read())
+        with open('bin') as file:
+            cls.bin_dict = json.load(file)
+            cls.counter = cls.bin_dict["counter"]
 
     @classmethod
     def increase_counter(cls):
-        with open('bin', 'r+') as f:
+        with open('bin', 'w') as f:
             cls.counter += 1
-            f.write(str(cls.counter))
+            cls.bin_dict["counter"] = cls.counter
+            json.dump(cls.bin_dict, f)
 
     @classmethod
     def load_script(cls, race):
