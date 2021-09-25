@@ -95,7 +95,6 @@ class Cursor(object):
             x, y, w, h = box
             pydirectinput.moveTo(int(x + w // 2), int(y + h // 2))
             cursor_type = cls.get_cursor_type()
-            print(cursor_type)
             if cursor_type == "AutoLoot0":
                 x_center, y_center = WowWindow.get_center_point()
                 pydirectinput.moveTo(x_center, y_center)
@@ -124,7 +123,7 @@ class Cursor(object):
                 elif cls.get_cursor_type() == "Repair0" or cls.get_cursor_type() == "Seller0":
                     pyautogui.keyDown("w")
                     for j in range(0, 12):
-                        time.sleep(0.05)
+                        time.sleep(0.01)
                         if cls.get_cursor_type() == "Quest1":
                             pydirectinput.click(button='right')
                             pyautogui.keyUp("w")
@@ -148,13 +147,14 @@ class Cursor(object):
                 elif cls.get_cursor_type() == "Quest0" or cls.get_cursor_type() == "Quest_Сompleted0":
                     pyautogui.keyDown("w")
                     for j in range(0, 12):
-                        time.sleep(0.05)
+                        time.sleep(0.01)
                         if cls.get_cursor_type() == "Quest1":
                             pydirectinput.click(button='right')
                             pyautogui.keyUp("w")
                             break
                     pyautogui.keyUp("w")
             if WorldData.quest_completed():
+                print("quest completed")
                 return True
             pydirectinput.moveTo(x, y)
             pydirectinput.mouseDown(button="right")

@@ -7,8 +7,8 @@ from pywinauto.application import Application
 
 
 class WowWindow(object):
-    # TITLE = "World of Warcraft"
-    TITLE = ""
+    TITLE = "World of Warcraft"
+    # TITLE = ""
     app = Application().connect(title=TITLE, found_index=0)
 
 

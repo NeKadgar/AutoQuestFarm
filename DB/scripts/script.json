@@ -4,13 +4,14 @@
     {"Action": ["Quest", 0], "NPC": [48.87, 41.65], "location": 697687},
     {"Action": ["Quest", 1], "NPC": [48.17, 42.94], "location": 697687},
     {"Action": ["Quest", 1], "NPC": [48.93, 40.16], "location": 697687},
-    {"Action": ["Kill", "Loot"], "NPC": [["Young Wolf", 7]], "location": 697687},
+    {"Action": ["Kill", "Loot"], "NPC": [["Young Wolf", 15]], "location": 697687},
     {"Action": ["Sell"], "NPC": [47.51, 41.58], "location": 697687},
     {"Action": ["Kill", "Loot"], "NPC": [["Kobold Laborer", 14]], "location": 697687},
     {"Action": ["Sell"], "NPC": [47.51, 41.58], "location": 697687},
     {"Action": ["Quest", 1], "NPC": [48.93, 40.16], "location": 697687},
     {"Action": ["Quest", 0], "NPC": [48.16, 42.93], "location": 697687},
     {"Action": ["Quest", 1], "NPC": [48.87, 41.65], "location": 697687},
-    {"Action": ["Kill", "Loot"], "NPC": [["Defias Thug", 20]], "location": 697687}
+    {"Action": ["Kill", "Loot"], "NPC": [["Defias Thug", 5]], "location": 697687},
+    {"Action": ["SendM", "Learn Skills, Complete quests"], "NPC": [], "location": 697687}
   ]
 }

@@ -18,6 +18,7 @@ rotation = MageRotation
 
 class SharkEye(object):
     marker = cv2.imread('./marker.png', 1)
+    loot_time = 0
 
     @staticmethod
     def _get_enemy_cords(image, w_min=40, h_min=40):
@@ -90,33 +91,38 @@ class SharkEye(object):
         # else:
         #     x = x_center
         #     return False
-        pyautogui.keyDown("a")
-        while True:
-            pyautogui.press("2")
-            WorldData.update()
-            if WorldData.action_used:
-                pyautogui.keyUp("a")
-                return True
-            if not WorldData.target_health:
-                return True
+        if WorldData.current_mana > 30 and WorldData.current_health > 3:
+            pyautogui.keyDown("a")
+            while True:
+                pyautogui.press("2")
+                WorldData.update()
+                if WorldData.action_used:
+                    pyautogui.keyUp("a")
+                    return True
+                if not WorldData.target_health:
+                    return True
+        else:
+            return False
 
     @classmethod
     def set_target(cls):
+        print("Set target")
         WowWindow.set_focus()
         pyautogui.press("tab")
         WorldData.update()
-        if WorldData.target_health > 10 and WorldData.range_to_target < 45:
+        if WorldData.target_health > 10 and WorldData.range_to_target < 40:
             pyautogui.press("enter")
             pyautogui.typewrite(Commands.MARKER, interval=0.01)
             pyautogui.press("enter")
 
-            while not cls.find_target():
-                pass
+            # while not cls.find_target():
+            #     pass
             return True
         return False
 
     @classmethod
     def find_lootable(cls):
+        print("Lo0tting")
         x, y, x1, y1 = WowWindow.get_app_position()
         image1 = ImageGrab.grab((x, y, x1, y1))
         time.sleep(0.7)
@@ -127,11 +133,14 @@ class SharkEye(object):
             lootable = Cursor.find_lootable(boxes)
             if lootable == "again":
                 cls.find_lootable()
-        pass
+            elif lootable:
+                print("Lo0tted")
+                return True
 
     @classmethod
     def attack(cls):
         # WorldData.in_combat_bot = True
+        print("Attack")
         rotation.attack()
 
     @classmethod

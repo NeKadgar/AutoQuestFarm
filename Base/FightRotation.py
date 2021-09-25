@@ -111,7 +111,7 @@ class MageRotation(object):
     @classmethod
     def attack(cls):
         t = time.time()
-        while WorldData.target_health >= 1 and time.time() - t < 120:
+        while WorldData.target_health >= 1 and time.time() - t < 40:
             WorldData.update()
             if cls.fire_ball.is_in_range():
                 pyautogui.press("1")
@@ -119,5 +119,4 @@ class MageRotation(object):
                     time.sleep(2)
                 cls.set_facing()
                 cls.fire_ball.cast()
-                continue
         WorldData.in_combat_bot = False
